@@ -1,5 +1,5 @@
 import { api } from '@/lib/api';
-import type { User } from '../../../shared/prisma/client';
+import { User } from '@shared/prisma';
 
 export const fetchUsers = async (): Promise<User[]> => {
   const res = await api('users');
