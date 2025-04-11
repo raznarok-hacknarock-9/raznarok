@@ -1,6 +1,6 @@
 import express from 'express';
 import itemRoutes from './routes/itemRoutes';
-import userRoutes from './routes/userRouters';
+import userRoutes from './routes/userRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 import cors from 'cors';
 
