@@ -1,5 +1,9 @@
 # raznarok
 
+### Node
+
+Node version: 20.
+
 ### 🐳 Running with Docker Compose
 
 This project includes a `docker-compose.yml` file that sets up:
