@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import prisma from '../config/prisma';
+import { AppError } from '../lib/AppError';
 
 export const createUser = async (
   req: Request,
@@ -33,17 +34,12 @@ export const getUserById = async (
   res: Response,
   next: NextFunction,
 ) => {
-  try {
-    const id = parseInt(z.string().parse(req.params.id), 10);
-    const user = await prisma.user.findUnique({ where: { id } });
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-    res.json(user);
-  } catch (error) {
-    next(error);
+  const id = parseInt(z.string().parse(req.params.id), 10);
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) {
+    throw new AppError('User not found', 404);
   }
+  res.json(user);
 };
 
 export const updateUser = async (
