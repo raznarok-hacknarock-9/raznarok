@@ -1,7 +1,10 @@
 package com.example.raznarokmobileapp.core.data.api
 
 import android.util.Log
+import com.example.raznarokmobileapp.core.domain.Result
 import com.example.raznarokmobileapp.core.domain.model.SimpleUser
+import com.example.raznarokmobileapp.core.domain.model.User
+import com.example.raznarokmobileapp.login.domain.SignInError
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -29,10 +32,24 @@ class KtorApi(
             contentType(ContentType.Application.Json)
             setBody(json)
         }
+        Log.d("XXX", result.body())
+    }
+
+    suspend fun login(email: String, password: String): Result<Unit, SignInError> {
+        val json = buildJsonObject {
+            put("email", email)
+            put("password", password)
+        }
+        val result = client.post("${API_BASE_URL}/login") {
+            contentType(ContentType.Application.Json)
+            setBody(json)
+        }
+        //check
+        return Result.Success(Unit)
     }
 
     companion object {
-        private const val API_BASE_URL = "http://192.168.1.17:3000/api"
+        private const val API_BASE_URL = "http://172.98.1.172:3000/api"
     }
 
 }

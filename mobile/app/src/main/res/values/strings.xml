@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">RaznarokMobileApp</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="email_invalid">Invalid Email</string>
+    <string name="username">Username</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="password_too_short">Password is too short</string>
+    <string name="network_error">Network Error</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="guest">Guest</string>
+    <string name="host">Host</string>
+    <string name="continue_as">Continue As</string>
+    <string name="continue_as_host">Continue as Host</string>
+    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="continue_as_guide">Continue as Guide</string>
+
 </resources>
