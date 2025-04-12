@@ -15,6 +15,62 @@ datasource db {
 }
 
 model User {
+  id                     Int            @id @default(autoincrement())
+  firstName              String
+  email                  String         @unique
+  profilePictureFilename String         @default("default_profile.png")
+  descriptionAsHost      String         @default("")
+  commentsAsHost         Comment[]      @relation("CommentsOnUser")
+  commentsAsVisitor      Comment[]      @relation("CommentsByAuthor")
+  tags                   Tag[]          @relation("UserTags")
+  availabilities         Availability[]
+  chatsAsHost            Chat[]         @relation("ChatsAsHost")
+  chatsAsVisitor         Chat[]         @relation("ChatsAsVisitor")
+}
+
+model Comment {
+  id       Int    @id @default(autoincrement())
+  content  String
+  rating   Int
+  authorId Int
+  userId   Int
+
+  author User @relation("CommentsByAuthor", fields: [authorId], references: [id])
+  user   User @relation("CommentsOnUser", fields: [userId], references: [id])
+}
+
+model Tag {
   id    Int    @id @default(autoincrement())
-  email String @unique
+  name  String @unique
+  users User[] @relation("UserTags")
+}
+
+model Availability {
+  id       Int      @id @default(autoincrement())
+  location String
+  dateFrom DateTime
+  dateTo   DateTime
+  userId   Int
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Chat {
+  id        Int @id @default(autoincrement())
+  hostId    Int
+  visitorId Int
+
+  host     User          @relation("ChatsAsHost", fields: [hostId], references: [id])
+  visitor  User          @relation("ChatsAsVisitor", fields: [visitorId], references: [id])
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id            Int      @id @default(autoincrement())
+  content       String
+  isHostMessage Boolean
+  timestamp     DateTime @default(now())
+  chatId        Int
+
+  chat Chat @relation(fields: [chatId], references: [id])
 }
