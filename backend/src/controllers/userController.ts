@@ -109,7 +109,10 @@ export const loginUser = async (
     if (!user) {
       throw new AppError('User not found', 404);
     }
-    res.json(user);
+    
+    const userWithRatings = calculateUserAverageRatings(user);
+
+    res.json(userWithRatings);
   } catch (error) {
     next(error);
   }
