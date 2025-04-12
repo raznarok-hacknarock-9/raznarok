@@ -8,6 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/assets', express.static('static'));
 
 app.use('/api/items', itemRoutes);
 app.use('/api/users', userRoutes);

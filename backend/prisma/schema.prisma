@@ -60,9 +60,13 @@ model Chat {
   hostId    Int
   visitorId Int
 
-  host     User          @relation("ChatsAsHost", fields: [hostId], references: [id])
-  visitor  User          @relation("ChatsAsVisitor", fields: [visitorId], references: [id])
-  messages ChatMessage[]
+  host                User          @relation("ChatsAsHost", fields: [hostId], references: [id])
+  visitor             User          @relation("ChatsAsVisitor", fields: [visitorId], references: [id])
+  messages            ChatMessage[]
+  hasHostConfirmed    Boolean       @default(false)
+  hasVisitorConfirmed Boolean       @default(false)
+  hasHostCommented    Boolean       @default(false)
+  hasVisitorCommented Boolean       @default(false)
 }
 
 model ChatMessage {

@@ -10,8 +10,8 @@ export const createUser = async (
 ) => {
   try {
     const { email } = req.body;
-    const newUser = await prisma.user.create({ data: { email } });
-    res.status(201).json(newUser);
+    // const newUser = await prisma.user.create({ data: { email } });
+    // res.status(201).json(newUser);
   } catch (error) {
     next(error);
   }
@@ -23,7 +23,26 @@ export const getUsers = async (
   next: NextFunction,
 ) => {
   try {
-    res.json(await prisma.user.findMany());
+    const querySchema = z.object({
+      email: z.string().email().optional(),
+      dateFrom: z.coerce.number().optional(),
+      dateTo: z.coerce.number().optional(),
+      location: z.string().optional(),
+    });
+
+    const { email, dateFrom, dateTo, location } = querySchema.parse(req.query);
+
+    const users = await prisma.user.findMany({
+      where: email ? { email } : undefined,
+      include: {
+        availabilities: true,
+        chatsAsHost: true,
+        chatsAsVisitor: true,
+        commentsAsHost: true,
+        commentsAsVisitor: true,
+      },
+    });
+    res.json(users);
   } catch (error) {
     next(error);
   }

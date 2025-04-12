@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "npx prisma generate && nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts"
+    "dev": "npx prisma generate && nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +15,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/node": "^22.14.0",
+    "@types/node": "^22.14.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "install": "^0.13.0",
@@ -29,5 +30,8 @@
     "@prisma/client": "^6.6.0",
     "cors": "^2.8.5",
     "zod": "^3.24.2"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
