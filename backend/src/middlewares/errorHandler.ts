@@ -13,6 +13,7 @@ export const errorHandler = (
       message: error.message,
       code: error.code ?? null,
     });
+    return;
   }
 
   res.status(500).json({

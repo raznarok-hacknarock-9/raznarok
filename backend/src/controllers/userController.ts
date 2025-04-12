@@ -18,13 +18,6 @@ export const getUsers = async (
     });
 
     const { dateFrom, dateTo, location } = querySchema.parse(req.query);
-    console.log(
-      dateFrom,
-      dateTo,
-      location,
-      new Date(dateFrom ?? 0),
-      new Date(dateTo ?? 0),
-    );
 
     if ((dateFrom && !dateTo) || (!dateFrom && dateTo)) {
       throw new AppError(
@@ -70,7 +63,7 @@ export const getUserById = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = parseInt(z.string().parse(req.params.id), 10);
+  const id = z.coerce.number().parse(req.params.id);
   const user = await prisma.user.findUnique({ 
     where: {
       id
@@ -108,12 +101,13 @@ export const loginUser = async (
     }
     const user = await prisma.user.findUnique({
       where: { email: data.email },
-      select: {
+      include: {
         availabilities: true,
         chatsAsHost: true,
         chatsAsVisitor: true,
         commentsAsHost: true,
         commentsAsVisitor: true,
+        tags: true,
       },
     });
     if (!user) {
