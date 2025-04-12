@@ -81,9 +81,9 @@ export const getUserById = async (
     throw new AppError('User not found', 404);
   }
 
-  const userWithRelations = calculateUserAverageRatings(user as UserWithRelations);
+  const userWithRatings = calculateUserAverageRatings(user as UserWithRelations);
 
-  res.json(userWithRelations);
+  res.json(userWithRatings);
 };
 
 export const loginUser = async (
