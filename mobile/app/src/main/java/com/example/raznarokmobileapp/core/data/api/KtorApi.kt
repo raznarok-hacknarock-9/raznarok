@@ -2,7 +2,6 @@ package com.example.raznarokmobileapp.core.data.api
 
 import android.util.Log
 import com.example.raznarokmobileapp.core.domain.Result
-import com.example.raznarokmobileapp.core.domain.model.SimpleUser
 import com.example.raznarokmobileapp.core.domain.model.User
 import com.example.raznarokmobileapp.login.domain.SignInError
 import io.ktor.client.HttpClient
@@ -19,8 +18,30 @@ class KtorApi(
     private val client: HttpClient
 ) {
 
-    suspend fun getUsers(): List<SimpleUser> {
+    suspend fun getUsers(): List<User> {
         val result = client.get("${API_BASE_URL}/users")
+        return result.body()
+    }
+
+    suspend fun fetchHosts(
+        location: String,
+        dateFrom: Long,
+        dateTo: Long,
+    ): List<User> {
+        val result = client.get("${API_BASE_URL}/users") {
+            url {
+                parameters.append("location", location)
+                parameters.append("dateFrom", dateFrom.toString())
+                parameters.append("dateTo", dateTo.toString())
+            }
+        }
+        return result.body()
+    }
+
+    suspend fun getUserById(
+        userId: Int
+    ): User {
+        val result = client.get("${API_BASE_URL}/users/$userId")
         return result.body()
     }
 
@@ -32,20 +53,18 @@ class KtorApi(
             contentType(ContentType.Application.Json)
             setBody(json)
         }
-        Log.d("XXX", result.body())
     }
 
-    suspend fun login(email: String, password: String): Result<Unit, SignInError> {
+    suspend fun login(email: String, password: String): Result<User, SignInError> {
         val json = buildJsonObject {
             put("email", email)
             put("password", password)
         }
-        val result = client.post("${API_BASE_URL}/login") {
+        val result = client.post("${API_BASE_URL}/users/login") {
             contentType(ContentType.Application.Json)
             setBody(json)
         }
-        //check
-        return Result.Success(Unit)
+        return Result.Success(result.body())
     }
 
     companion object {

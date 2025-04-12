@@ -26,6 +26,7 @@ fun CustomTextField(
     modifier: Modifier = Modifier,
     error: UiText? = null,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
 ) {
     OutlinedTextField(
         value = value,
@@ -33,6 +34,7 @@ fun CustomTextField(
             Text(text = stringResource(label))
         },
         enabled = enabled,
+        readOnly = readOnly,
         leadingIcon = {
             Icon(
                 painter = painterResource(icon),

@@ -22,4 +22,7 @@ sealed class RaznarokAppScreen(
     @Serializable
     data object GuestHome: RaznarokAppScreen("GuestHome", "Home", R.drawable.ic_home)
 
+    @Serializable
+    data class HostProfile(val hostId: Int): RaznarokAppScreen("GuestProfile")
+
 }

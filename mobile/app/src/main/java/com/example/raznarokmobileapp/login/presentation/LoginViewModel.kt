@@ -17,10 +17,6 @@ class LoginViewModel(
 
     var loginState by mutableStateOf(LoginState())
 
-    init {
-
-    }
-
     fun onLoginScreenEvent(event: LoginScreenEvent) {
         when (event) {
             is LoginScreenEvent.EmailChanged -> {
@@ -42,18 +38,21 @@ class LoginViewModel(
     private fun signInWithEmailAndPassword() {
         viewModelScope.launch {
             val loginResult = usersRepository.signInWithEmailAndPassword(loginState.email, loginState.password)
-            val loginError = when (loginResult) {
+            when (loginResult) {
                 is Result.Error -> {
-                    loginResult.error.asUiText()
+                    loginState = loginState.copy(
+                        loginError = loginResult.error.asUiText(),
+                        isLoginPending = false
+                    )
                 }
                 is Result.Success -> {
-                    null
+                    loginState = loginState.copy(
+                        loginError = null,
+                        isLoginPending = false,
+                        loggedInUser = loginResult.data,
+                    )
                 }
             }
-            loginState = loginState.copy(
-                loginError = loginError,
-                isLoginPending = false
-            )
         }
     }
 
