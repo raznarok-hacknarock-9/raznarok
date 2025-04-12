@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "npx prisma generate && nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "npx prisma generate && nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts",
     "seed": "prisma db seed"
   },
   "keywords": [],

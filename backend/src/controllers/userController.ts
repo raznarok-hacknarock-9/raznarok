@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import prisma from '../config/prisma';
 import { AppError } from '../lib/AppError';
+import { UserWithRelations } from '../models/prisma';
+import { calculateUserAverageRatings } from '../lib/userHelpers';
 
 export const getUsers = async (
   req: Request,
@@ -52,7 +54,11 @@ export const getUsers = async (
       },
     });
 
-    res.json(users);
+    const usersWithRatings = users.map((user: UserWithRelations) =>
+      calculateUserAverageRatings(user),
+    );
+
+    res.json(usersWithRatings);
   } catch (error) {
     next(error);
   }
@@ -64,11 +70,25 @@ export const getUserById = async (
   next: NextFunction,
 ) => {
   const id = parseInt(z.string().parse(req.params.id), 10);
-  const user = await prisma.user.findUnique({ where: { id } });
+  const user = await prisma.user.findUnique({ 
+    where: {
+      id
+    },
+    include: {
+      availabilities: true,
+      chatsAsHost: true,
+      chatsAsVisitor: true,
+      commentsAsHost: true,
+      commentsAsVisitor: true,
+    },
+  });
   if (!user) {
     throw new AppError('User not found', 404);
   }
-  res.json(user);
+
+  const userWithRelations = calculateUserAverageRatings(user as UserWithRelations);
+
+  res.json(userWithRelations);
 };
 
 export const loginUser = async (
