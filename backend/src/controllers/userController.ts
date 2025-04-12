@@ -51,6 +51,7 @@ export const getUsers = async (
         chatsAsVisitor: true,
         commentsAsHost: true,
         commentsAsVisitor: true,
+        tags: true,
       },
     });
 
@@ -80,6 +81,7 @@ export const getUserById = async (
       chatsAsVisitor: true,
       commentsAsHost: true,
       commentsAsVisitor: true,
+      tags: true,
     },
   });
   if (!user) {
