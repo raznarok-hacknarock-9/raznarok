@@ -48,11 +48,7 @@ export const getUsers = async (
       },
     });
 
-    const usersWithRatings = users.map((user: UserWithRelations) =>
-      calculateUserAverageRatings(user),
-    );
-
-    res.json(usersWithRatings);
+    res.json(users.map(calculateUserAverageRatings));
   } catch (error) {
     next(error);
   }
@@ -81,7 +77,7 @@ export const getUserById = async (
     throw new AppError('User not found', 404);
   }
 
-  const userWithRatings = calculateUserAverageRatings(user as UserWithRelations);
+  const userWithRatings = calculateUserAverageRatings(user);
 
   res.json(userWithRatings);
 };

@@ -7,5 +7,6 @@ export type UserWithRelations = Prisma.UserGetPayload<{
     chatsAsVisitor: true,
     commentsAsHost: true,
     commentsAsVisitor: true,
+    tags: true,
   };
 }>;
