@@ -5,12 +5,12 @@ async function main() {}
 main()
   .then(async () => {
     const foodTag = await prisma.tag.create({ data: { name: 'Food' } });
-    const adventureTag = await prisma.tag.create({
-      data: { name: 'Adventure' },
-    });
-    const cultureTag = await prisma.tag.create({
-      data: { name: 'Culture' },
-    });
+    const adventureTag = await prisma.tag.create({ data: { name: 'Adventure' } });
+    const cultureTag = await prisma.tag.create({ data: { name: 'Culture' } });
+    const natureTag = await prisma.tag.create({ data: { name: 'Nature' } });
+    const historyTag = await prisma.tag.create({ data: { name: 'History' } });
+    const artTag = await prisma.tag.create({ data: { name: 'Art' } });
+    const shoppingTag = await prisma.tag.create({ data: { name: 'Shopping' } });
 
     const hostUser = await prisma.user.create({
       data: {
@@ -103,6 +103,193 @@ main()
           userId: visitorUser.id,
         },
       ],
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user1@gmail.com',
+        firstName: 'Michał',
+        descriptionAsHost: ``,
+        minPriceRange: 100,
+        maxPriceRange: 150,
+        tags: {
+          connect: [{ id: historyTag.id }, { id: cultureTag.id }],
+        },
+        profilePictureFilename: '1.jpg',
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user2@gmail.com',
+        firstName: 'Hubert',
+        descriptionAsHost: ``,
+        minPriceRange: 100,
+        maxPriceRange: 200,
+        tags: {
+          connect: [{ id: foodTag.id }],
+        },
+        profilePictureFilename: '2.jpg',
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user3@gmail.com',
+        firstName: 'Wojciech',
+        descriptionAsHost: ``,
+        minPriceRange: 100,
+        maxPriceRange: 500,
+        tags: {
+          connect: [{ id: artTag.id }, { id: natureTag.id }],
+        },
+        profilePictureFilename: '3.jpg',
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user4@gmail.com',
+        firstName: 'Izabela',
+        descriptionAsHost: ``,
+        minPriceRange: 100,
+        maxPriceRange: 1000,
+        tags: {
+          connect: [{ id: shoppingTag.id }],
+        },
+        profilePictureFilename: '4.jpg',
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user5@gmail.com',
+        firstName: 'Marco',
+        descriptionAsHost: ``,
+        profilePictureFilename: '5.jpg',
+        minPriceRange: 300,
+        maxPriceRange: 500,
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user6@gmail.com',
+        firstName: 'Kim',
+        descriptionAsHost: ``,
+        profilePictureFilename: '6.jpg',
+        minPriceRange: 200,
+        maxPriceRange: 2000,
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: 'user7@gmail.com',
+        firstName: 'Sicilia',
+        descriptionAsHost: ``,
+        profilePictureFilename: '7.jpg',
+        minPriceRange: 1500,
+        maxPriceRange: 6000,
+        availabilities: {
+          create: [
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-05-01T10:00:00Z'),
+              dateTo: new Date('2025-05-04T14:00:00Z'),
+            },
+            {
+              location: 'Kraków',
+              dateFrom: new Date('2025-06-01T12:00:00Z'),
+              dateTo: new Date('2025-07-03T12:00:00Z'),
+            },
+          ],
+        },
+      },
     });
 
     await prisma.$disconnect();
