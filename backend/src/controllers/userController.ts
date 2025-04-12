@@ -42,8 +42,28 @@ export const getUsers = async (
         availabilities: true,
         chatsAsHost: true,
         chatsAsVisitor: true,
-        commentsAsHost: true,
-        commentsAsVisitor: true,
+        commentsAsVisitor: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
+        commentsAsHost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
         tags: true,
       },
     });
@@ -60,16 +80,36 @@ export const getUserById = async (
   next: NextFunction,
 ) => {
   const id = z.coerce.number().parse(req.params.id);
-  const user = await prisma.user.findUnique({ 
+  const user = await prisma.user.findUnique({
     where: {
-      id
+      id,
     },
     include: {
       availabilities: true,
       chatsAsHost: true,
       chatsAsVisitor: true,
-      commentsAsHost: true,
-      commentsAsVisitor: true,
+      commentsAsVisitor: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
+        },
+      },
+      commentsAsHost: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
+        },
+      },
       tags: true,
     },
   });
@@ -101,8 +141,28 @@ export const loginUser = async (
         availabilities: true,
         chatsAsHost: true,
         chatsAsVisitor: true,
-        commentsAsHost: true,
-        commentsAsVisitor: true,
+        commentsAsVisitor: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
+        commentsAsHost: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
         tags: true,
       },
     });

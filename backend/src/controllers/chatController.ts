@@ -3,6 +3,7 @@ import { z } from 'zod';
 import prisma from '../config/prisma';
 import { AppError } from '../lib/AppError';
 import { sortChatMessages } from '../lib/chatHelpers';
+import { pay } from '../lib/paymentHelpers';
 
 export const createChat = async (
   req: Request,
@@ -23,7 +24,8 @@ export const createChat = async (
     },
   });
   if (existingChat) {
-    throw new AppError('Chat already exists', 'chat-already-exists', 400);
+    res.json({ id: existingChat.id });
+    return;
   }
 
   const chat = await prisma.chat.create({
@@ -36,7 +38,7 @@ export const createChat = async (
     },
   });
 
-  res.json(sortChatMessages(chat));
+  res.json({ id: chat.id });
 };
 
 export const getChats = async (
@@ -45,8 +47,8 @@ export const getChats = async (
   next: NextFunction,
 ) => {
   const querySchema = z.object({
-    hostId: z.number().optional(),
-    visitorId: z.number().optional(),
+    hostId: z.coerce.number().optional(),
+    visitorId: z.coerce.number().optional(),
   });
 
   const { hostId, visitorId: ownerId } = querySchema.parse(req.query);
@@ -56,7 +58,23 @@ export const getChats = async (
       ...(hostId && { hostId }),
       ...(ownerId && { visitorId: ownerId }),
     },
-    include: { messages: true },
+    include: {
+      messages: true,
+      host: {
+        select: {
+          id: true,
+          firstName: true,
+          profilePictureFilename: true,
+        },
+      },
+      visitor: {
+        select: {
+          id: true,
+          firstName: true,
+          profilePictureFilename: true,
+        },
+      },
+    },
   });
 
   res.json(chats.map(sortChatMessages));
@@ -73,6 +91,20 @@ export const getChatById = async (
     where: { id },
     include: {
       messages: true,
+      host: {
+        select: {
+          id: true,
+          firstName: true,
+          profilePictureFilename: true,
+        },
+      },
+      visitor: {
+        select: {
+          id: true,
+          firstName: true,
+          profilePictureFilename: true,
+        },
+      },
     },
   });
 
@@ -89,12 +121,13 @@ export const createMessage = async (
   next: NextFunction,
 ) => {
   const bodySchema = z.object({
-    content: z.string(),
+    content: z.string().default(''),
     userId: z.number(),
+    type: z.string().optional(),
   });
 
   const chatId = z.coerce.number().parse(req.params.id);
-  const { content, userId } = bodySchema.parse(req.body);
+  const { content, userId, type } = bodySchema.parse(req.body);
 
   const chat = await prisma.chat.findFirst({
     where: {
@@ -112,56 +145,106 @@ export const createMessage = async (
 
   const isHostMessage = chat.hostId === userId;
 
+  if (type && type != 'text' && !isHostMessage) {
+    throw new AppError(
+      'Only host can send this type of message',
+      'invalid-message-type',
+      400,
+    );
+  }
+
+  if (type && type != 'text') {
+    await prisma.chatMessage.updateMany({
+      where: {
+        chatId,
+        type,
+      },
+      data: {
+        status: 'canceled',
+      },
+    });
+  }
+
   const message = await prisma.chatMessage.create({
     data: {
       content,
       chatId,
       isHostMessage,
+      type,
     },
   });
 
   res.json(message);
 };
 
-export const confirmMeeting = async (
+export const updateMessageStatus = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const chatId = z.coerce.number().parse(req.params.id);
+  const paramsSchema = z.object({
+    messageId: z.coerce.number(),
+  });
+  const { messageId } = paramsSchema.parse(req.params);
 
   const bodySchema = z.object({
-    userId: z.number(),
+    status: z.string(),
   });
 
-  const { userId } = bodySchema.parse(req.body);
+  const { status } = bodySchema.parse(req.body);
+
+  const message = await prisma.chatMessage.findFirst({
+    where: {
+      id: messageId,
+    },
+  });
+  if (!message) {
+    throw new AppError('Message not found', 'message-not-found', 404);
+  }
 
   const chat = await prisma.chat.findFirst({
     where: {
-      id: chatId,
+      id: message.chatId,
     },
   });
-
   if (!chat) {
     throw new AppError('Chat not found', 'chat-not-found', 404);
   }
 
-  if (chat.hostId !== userId && chat.visitorId !== userId) {
-    throw new AppError('User is not part of the chat', 'invalid-user-id', 400);
-  }
-
-  const isHost = chat.hostId === userId;
-  const updatedChat = await prisma.chat.update({
+  const updatedMessage = await prisma.chatMessage.update({
     where: {
-      id: chatId,
+      id: messageId,
     },
     data: {
-      ...(isHost && { hasHostConfirmed: true }),
-      ...(!isHost && { hasVisitorConfirmed: true }),
+      status,
     },
   });
 
-  res.json(updatedChat);
+  if (status === 'confirmed' && message.type === 'meeting') {
+    await prisma.chat.update({
+      where: {
+        id: message.chatId,
+      },
+      data: {
+        isVisitConfirmed: true,
+      },
+    });
+
+    await pay(chat.visitorId, chat.hostId, chat.cost);
+  }
+  if (status === 'confirmed' && message.type === 'cost') {
+    await prisma.chat.update({
+      where: {
+        id: message.chatId,
+      },
+      data: {
+        cost: parseInt(message.content, 10),
+        isCostConfirmed: true,
+      },
+    });
+  }
+
+  res.json(updatedMessage);
 };
 
 export const commentMeeting = async (
@@ -214,5 +297,18 @@ export const commentMeeting = async (
     },
   });
 
-  res.json(comment);
+  const fullComment = await prisma.comment.findUnique({
+    where: { id: comment.id },
+    include: {
+      user: {
+        select: {
+          id: true,
+          firstName: true,
+          profilePictureFilename: true,
+        },
+      },
+    },
+  });
+
+  res.json(fullComment);
 };

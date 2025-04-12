@@ -26,6 +26,9 @@ model User {
   availabilities         Availability[]
   chatsAsHost            Chat[]         @relation("ChatsAsHost")
   chatsAsVisitor         Chat[]         @relation("ChatsAsVisitor")
+  points                 Int            @default(0)
+  minPriceRange          Int            @default(100)
+  maxPriceRange          Int            @default(10000)
 }
 
 model Comment {
@@ -63,14 +66,17 @@ model Chat {
   host                User          @relation("ChatsAsHost", fields: [hostId], references: [id])
   visitor             User          @relation("ChatsAsVisitor", fields: [visitorId], references: [id])
   messages            ChatMessage[]
-  hasHostConfirmed    Boolean       @default(false)
-  hasVisitorConfirmed Boolean       @default(false)
+  cost                Int           @default(100)
+  isCostConfirmed     Boolean       @default(false)
+  isVisitConfirmed    Boolean       @default(false)
   hasHostCommented    Boolean       @default(false)
   hasVisitorCommented Boolean       @default(false)
 }
 
 model ChatMessage {
   id            Int      @id @default(autoincrement())
+  type          String   @default("text")
+  status        String   @default("pending")
   content       String
   isHostMessage Boolean
   timestamp     DateTime @default(now())

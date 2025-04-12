@@ -14,10 +14,10 @@ main()
 
     const hostUser = await prisma.user.create({
       data: {
+        points: 4000,
         email: 'host@gmail.com',
         firstName: 'Adam',
-        descriptionAsHost: `
-     Hi! I'm a local from Kraków who loves showing guests the city's hidden gems—especially when it comes to food. From cozy traditional spots to trendy local favorites, I can point you to (or take you to!) some truly amazing restaurants. Let me help you experience Kraków like a local!
+        descriptionAsHost: `Hi! I'm a local from Kraków who loves showing guests the city's hidden gems—especially when it comes to food. From cozy traditional spots to trendy local favorites, I can point you to (or take you to!) some truly amazing restaurants. Let me help you experience Kraków like a local!
     `,
         tags: {
           connect: [{ id: foodTag.id }, { id: cultureTag.id }],
@@ -42,10 +42,10 @@ main()
 
     const visitorUser = await prisma.user.create({
       data: {
+        points: 1000,
         email: 'visitor@gmail.com',
         firstName: 'Lucía',
-        descriptionAsHost: `
-    Hola! I'm a Barcelona native who loves sharing the city's vibrant culture, art, and food. Whether you're into exploring Gaudí's masterpieces, chilling by the beach, or tasting authentic tapas in tucked-away bars, I'd be thrilled to show you around. Let's make your Barcelona trip unforgettable—like a true local!
+        descriptionAsHost: `Hola! I'm a Barcelona native who loves sharing the city's vibrant culture, art, and food. Whether you're into exploring Gaudí's masterpieces, chilling by the beach, or tasting authentic tapas in tucked-away bars, I'd be thrilled to show you around. Let's make your Barcelona trip unforgettable—like a true local!
     `,
         tags: {
           connect: [{ id: adventureTag.id }],
