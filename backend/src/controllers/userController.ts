@@ -3,20 +3,6 @@ import { z } from 'zod';
 import prisma from '../config/prisma';
 import { AppError } from '../lib/AppError';
 
-export const createUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const { email } = req.body;
-    // const newUser = await prisma.user.create({ data: { email } });
-    // res.status(201).json(newUser);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const getUsers = async (
   req: Request,
   res: Response,
@@ -24,16 +10,39 @@ export const getUsers = async (
 ) => {
   try {
     const querySchema = z.object({
-      email: z.string().email().optional(),
       dateFrom: z.coerce.number().optional(),
       dateTo: z.coerce.number().optional(),
       location: z.string().optional(),
     });
 
-    const { email, dateFrom, dateTo, location } = querySchema.parse(req.query);
+    const { dateFrom, dateTo, location } = querySchema.parse(req.query);
+    console.log(
+      dateFrom,
+      dateTo,
+      location,
+      new Date(dateFrom ?? 0),
+      new Date(dateTo ?? 0),
+    );
+
+    if ((dateFrom && !dateTo) || (!dateFrom && dateTo)) {
+      throw new AppError(
+        'dateFrom and dateTo must both be set or both be omitted',
+        400,
+      );
+    }
 
     const users = await prisma.user.findMany({
-      where: email ? { email } : undefined,
+      where: {
+        availabilities: {
+          some: {
+            ...(dateTo && { dateFrom: { lte: new Date(dateTo) } }),
+            ...(dateFrom && { dateTo: { gte: new Date(dateFrom) } }),
+            ...(location && {
+              location: { contains: location, mode: 'insensitive' },
+            }),
+          },
+        },
+      },
       include: {
         availabilities: true,
         chatsAsHost: true,
@@ -42,6 +51,7 @@ export const getUsers = async (
         commentsAsVisitor: true,
       },
     });
+
     res.json(users);
   } catch (error) {
     next(error);
@@ -61,33 +71,33 @@ export const getUserById = async (
   res.json(user);
 };
 
-export const updateUser = async (
+export const loginUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const id = parseInt(z.string().parse(req.params.id), 10);
-    const { email } = req.body;
-    const updateUser = await prisma.user.update({
-      data: { email },
-      where: { id },
+    const authSchema = z.object({
+      email: z.string().email(),
     });
-    res.json(updateUser);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const deleteUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const id = parseInt(z.string().parse(req.params.id), 10);
-    const deletedUser = await prisma.user.delete({ where: { id } });
-    res.json(deletedUser);
+    const { data, success } = authSchema.safeParse(req.body);
+    if (!success) {
+      throw new AppError('Invalid request', 400);
+    }
+    const user = await prisma.user.findUnique({
+      where: { email: data.email },
+      select: {
+        availabilities: true,
+        chatsAsHost: true,
+        chatsAsVisitor: true,
+        commentsAsHost: true,
+        commentsAsVisitor: true,
+      },
+    });
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+    res.json(user);
   } catch (error) {
     next(error);
   }
