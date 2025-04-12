@@ -49,6 +49,7 @@ export const getUsers = async (
         chatsAsVisitor: true,
         commentsAsHost: true,
         commentsAsVisitor: true,
+        tags: true,
       },
     });
 
@@ -64,7 +65,17 @@ export const getUserById = async (
   next: NextFunction,
 ) => {
   const id = parseInt(z.string().parse(req.params.id), 10);
-  const user = await prisma.user.findUnique({ where: { id } });
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      availabilities: true,
+      chatsAsHost: true,
+      chatsAsVisitor: true,
+      commentsAsHost: true,
+      commentsAsVisitor: true,
+      tags: true,
+    },
+  });
   if (!user) {
     throw new AppError('User not found', 404);
   }
@@ -92,6 +103,7 @@ export const loginUser = async (
         chatsAsVisitor: true,
         commentsAsHost: true,
         commentsAsVisitor: true,
+        tags: true,
       },
     });
     if (!user) {
