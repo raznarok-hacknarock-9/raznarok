@@ -40,10 +40,53 @@ export const getUsers = async (
       },
       include: {
         availabilities: true,
-        chatsAsHost: true,
-        chatsAsVisitor: true,
+        chatsAsHost: {
+          include: {
+            messages: true,
+            host: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
+        chatsAsVisitor: {
+          include: {
+            messages: true,
+            host: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
         commentsAsVisitor: {
           include: {
+            author: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
             user: {
               select: {
                 id: true,
@@ -55,6 +98,13 @@ export const getUsers = async (
         },
         commentsAsHost: {
           include: {
+            author: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
             user: {
               select: {
                 id: true,
@@ -86,10 +136,53 @@ export const getUserById = async (
     },
     include: {
       availabilities: true,
-      chatsAsHost: true,
-      chatsAsVisitor: true,
+      chatsAsHost: {
+        include: {
+          messages: true,
+          host: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
+          visitor: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
+        },
+      },
+      chatsAsVisitor: {
+        include: {
+          messages: true,
+          host: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
+          visitor: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
+        },
+      },
       commentsAsVisitor: {
         include: {
+          author: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
           user: {
             select: {
               id: true,
@@ -101,6 +194,13 @@ export const getUserById = async (
       },
       commentsAsHost: {
         include: {
+          author: {
+            select: {
+              id: true,
+              firstName: true,
+              profilePictureFilename: true,
+            },
+          },
           user: {
             select: {
               id: true,
@@ -139,10 +239,53 @@ export const loginUser = async (
       where: { email: data.email },
       include: {
         availabilities: true,
-        chatsAsHost: true,
-        chatsAsVisitor: true,
+        chatsAsHost: {
+          include: {
+            messages: true,
+            host: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
+        chatsAsVisitor: {
+          include: {
+            messages: true,
+            host: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+            visitor: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
+          },
+        },
         commentsAsVisitor: {
           include: {
+            author: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
             user: {
               select: {
                 id: true,
@@ -154,6 +297,13 @@ export const loginUser = async (
         },
         commentsAsHost: {
           include: {
+            author: {
+              select: {
+                id: true,
+                firstName: true,
+                profilePictureFilename: true,
+              },
+            },
             user: {
               select: {
                 id: true,
@@ -169,7 +319,7 @@ export const loginUser = async (
     if (!user) {
       throw new AppError('User not found', 404);
     }
-    
+
     const userWithRatings = calculateUserAverageRatings(user);
 
     res.json(userWithRatings);

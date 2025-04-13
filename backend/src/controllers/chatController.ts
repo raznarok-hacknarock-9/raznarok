@@ -24,6 +24,10 @@ export const createChat = async (
     },
   });
   if (existingChat) {
+    console.log(
+      'tried to create a new chat, but it already exists',
+      existingChat,
+    );
     res.json({ id: existingChat.id });
     return;
   }
@@ -37,6 +41,7 @@ export const createChat = async (
       messages: true,
     },
   });
+  console.log('created chat', chat);
 
   res.json({ id: chat.id });
 };
@@ -112,6 +117,8 @@ export const getChatById = async (
     throw new AppError('Chat not found', 'chat-not-found', 404);
   }
 
+  // console.log('resturing chat', chat);
+
   res.json(sortChatMessages(chat));
 };
 
@@ -173,6 +180,7 @@ export const createMessage = async (
       type,
     },
   });
+  console.log('created message', message);
 
   res.json(message);
 };
@@ -300,6 +308,13 @@ export const commentMeeting = async (
   const fullComment = await prisma.comment.findUnique({
     where: { id: comment.id },
     include: {
+      author: {
+        select: {
+          id: true,
+          firstName: true,
+          profilePictureFilename: true,
+        },
+      },
       user: {
         select: {
           id: true,
