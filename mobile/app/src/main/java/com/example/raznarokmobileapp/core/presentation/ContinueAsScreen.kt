@@ -1,5 +1,6 @@
 package com.example.raznarokmobileapp.core.presentation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,10 @@ fun ContinueAsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
+            Image(
+                painter = painterResource(R.drawable.ic_app_logo),
+                contentDescription = null
+            )
             Text(
                 text = stringResource(R.string.choose_your_mode),
                 style = MaterialTheme.typography.headlineLarge

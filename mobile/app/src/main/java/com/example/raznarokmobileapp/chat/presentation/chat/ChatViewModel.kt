@@ -87,8 +87,39 @@ class ChatViewModel(
                     )
                 }
             }
+            is ChatScreenEvent.DenyCostSuggestion -> denyCostSuggestion(event.chatMessageId)
+            is ChatScreenEvent.ConfirmCostSuggestion -> confirmCostSuggestion(event.chatMessageId)
+            is ChatScreenEvent.DenyMeetingConfirmation -> denyMeetingConfirmation(event.chatMessageId)
+            is ChatScreenEvent.ConfirmMeeting -> confirmMeeting(event.chatMessageId)
             else -> Unit
         }
     }
 
+    private fun denyCostSuggestion(chatMessageId: Int) {
+        viewModelScope.launch {
+            chatsRepository.denyMessage(chatMessageId)
+            getChat()
+        }
+    }
+
+    private fun confirmCostSuggestion(chatMessageId: Int) {
+        viewModelScope.launch {
+            chatsRepository.confirmMessage(chatMessageId)
+            getChat()
+        }
+    }
+
+    private fun denyMeetingConfirmation(chatMessageId: Int) {
+        viewModelScope.launch {
+            chatsRepository.denyMessage(chatMessageId)
+            getChat()
+        }
+    }
+
+    private fun confirmMeeting(chatMessageId: Int) {
+        viewModelScope.launch {
+            chatsRepository.confirmMessage(chatMessageId)
+            getChat()
+        }
+    }
 }

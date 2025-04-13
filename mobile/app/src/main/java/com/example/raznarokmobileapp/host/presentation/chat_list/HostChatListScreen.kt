@@ -1,4 +1,4 @@
-package com.example.raznarokmobileapp.chat.presentation.chat_list
+package com.example.raznarokmobileapp.host.presentation.chat_list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,19 +29,20 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.raznarokmobileapp.R
+import com.example.raznarokmobileapp.chat.presentation.chat_list.ChatListScreenEvent
 import com.example.raznarokmobileapp.core.presentation.components.UserAvatar
 import com.example.raznarokmobileapp.guest.presentation.utils.timeAgoFromIso
 import com.example.raznarokmobileapp.ui.theme.RaznarokMobileAppTheme
-import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatListScreen(
-    chatListState: ChatListState,
-    onChatListScreenEvent: (ChatListScreenEvent) -> Unit,
+fun HostChatListScreen(
+    hostChatListState: HostChatListState,
+    onHostChatListScreenEvent: (HostChatListScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -62,25 +62,25 @@ fun ChatListScreen(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            items(chatListState.chats) { chat ->
+            items(hostChatListState.chats) { chat ->
                 Card(
                     onClick = {
-                        onChatListScreenEvent(ChatListScreenEvent.GoToChat(chat.id))
+                        onHostChatListScreenEvent(HostChatListScreenEvent.GoToChat(chat.id))
                     },
                     modifier = Modifier
                         .padding(horizontal = dimensionResource(R.dimen.padding_medium))
                         .fillMaxWidth()
-                        .height(IntrinsicSize.Max)
+                        .height(100.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(
                             vertical = dimensionResource(R.dimen.padding_small),
                             horizontal = dimensionResource(R.dimen.padding_medium)
-                        )
+                        ).fillMaxHeight()
                     ) {
                         UserAvatar(
-                            profilePicture = chat.host.profilePictureFilename
+                            profilePicture = chat.visitor.profilePictureFilename
                         )
                         Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_medium)))
                         Column(
@@ -93,7 +93,7 @@ fun ChatListScreen(
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
                                 Text(
-                                    text = chat.host.firstName,
+                                    text = chat.visitor.firstName,
                                     style = MaterialTheme.typography.titleLarge
                                 )
                                 chat.messages.lastOrNull()?.let {
@@ -122,9 +122,9 @@ fun ChatListScreen(
 @Composable
 private fun Preview() {
     RaznarokMobileAppTheme {
-        ChatListScreen(
-            chatListState = ChatListState(),
-            onChatListScreenEvent = {}
+        HostChatListScreen(
+            hostChatListState = HostChatListState(),
+            onHostChatListScreenEvent = {}
         )
     }
 }

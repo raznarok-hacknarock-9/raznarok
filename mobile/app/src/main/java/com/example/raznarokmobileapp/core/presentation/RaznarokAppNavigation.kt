@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults.contentWindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,6 +29,15 @@ import com.example.raznarokmobileapp.guest.presentation.home.GuestHomeViewModel
 import com.example.raznarokmobileapp.guest.presentation.host_profile.HostProfileScreen
 import com.example.raznarokmobileapp.guest.presentation.host_profile.HostProfileScreenEvent
 import com.example.raznarokmobileapp.guest.presentation.host_profile.HostProfileViewModel
+import com.example.raznarokmobileapp.host.presentation.HostBottomNavigation
+import com.example.raznarokmobileapp.host.presentation.chat.HostChatScreen
+import com.example.raznarokmobileapp.host.presentation.chat.HostChatScreenEvent
+import com.example.raznarokmobileapp.host.presentation.chat.HostChatViewModel
+import com.example.raznarokmobileapp.host.presentation.chat_list.HostChatListScreen
+import com.example.raznarokmobileapp.host.presentation.chat_list.HostChatListScreenEvent
+import com.example.raznarokmobileapp.host.presentation.chat_list.HostChatListViewModel
+import com.example.raznarokmobileapp.host.presentation.profile_edit.HostProfileEditScreen
+import com.example.raznarokmobileapp.host.presentation.profile_edit.HostProfileEditViewModel
 import com.example.raznarokmobileapp.login.presentation.LoginScreen
 import com.example.raznarokmobileapp.login.presentation.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -41,11 +51,20 @@ fun RaznarokAppNavigation(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val guestBottomNavigationScreens = listOf(RaznarokAppScreen.GuestHome, RaznarokAppScreen.Chats)
+    val hostBottomNavigationScreens = listOf(RaznarokAppScreen.HostChats, RaznarokAppScreen.HostProfileEdit)
     Scaffold(
         bottomBar = {
             if (currentRoute != null && currentRoute.getScreenFromRoute() in guestBottomNavigationScreens) {
                 GuestBottomNavigation(
                     navigationScreens = guestBottomNavigationScreens,
+                    currentScreen = currentRoute.getScreenFromRoute(),
+                    onNavigate = { screen ->
+                        navController.navigate(screen)
+                    }
+                )
+            } else if (currentRoute != null && currentRoute.getScreenFromRoute() in hostBottomNavigationScreens) {
+                HostBottomNavigation(
+                    navigationScreens = hostBottomNavigationScreens,
                     currentScreen = currentRoute.getScreenFromRoute(),
                     onNavigate = { screen ->
                         navController.navigate(screen)
@@ -126,9 +145,6 @@ fun RaznarokAppNavigation(
                     val chatListViewModel = koinViewModel<ChatListViewModel>(
                         parameters = { parametersOf(loginState.loggedInUser!!.id) }
                     )
-//                    val chatListViewModel = koinViewModel<ChatListViewModel>(
-//                        parameters = { parametersOf(2) }
-//                    )
                     val chatListState by chatListViewModel.chatListState.collectAsStateWithLifecycle()
                     ChatListScreen(
                         chatListState = chatListState,
@@ -145,8 +161,9 @@ fun RaznarokAppNavigation(
                 composable<RaznarokAppScreen.Chat> { backStackEntry ->
                     val chat: RaznarokAppScreen.Chat = backStackEntry.toRoute()
                     val chatViewModel = koinViewModel<ChatViewModel>(
-                        parameters = { parametersOf(chat.id, 2) }
+                        parameters = { parametersOf(chat.id, loginState.loggedInUser!!.id) }
                     )
+                    // jak sie zapsuje to tutaj
                     val chatState by chatViewModel.chatState.collectAsStateWithLifecycle()
                     ChatScreen(
                         chatState = chatState,
@@ -163,14 +180,56 @@ fun RaznarokAppNavigation(
                     )
                 }
             }
-//            navigation<RaznarokAppScreen.Host>(startDestination = RaznarokAppScreen.HostChats) {
-//                composable<RaznarokAppScreen.HostChats> {
-//
-//                }
-//                composable<RaznarokAppScreen.HostProfileEdit> {
-//
-//                }
-//            }
+            navigation<RaznarokAppScreen.Host>(startDestination = RaznarokAppScreen.HostChats) {
+                composable<RaznarokAppScreen.HostChats> {
+                    val hostChatListViewModel = koinViewModel<HostChatListViewModel>(
+                        parameters = { parametersOf(loginState.loggedInUser!!.id) }
+                    )
+                    val hostChatListState by hostChatListViewModel.hostChatListState.collectAsStateWithLifecycle()
+                    HostChatListScreen(
+                        hostChatListState = hostChatListState,
+                        onHostChatListScreenEvent = { event ->
+                            when (event) {
+                                is HostChatListScreenEvent.GoToChat -> {
+                                    navController.navigate(RaznarokAppScreen.HostChat(event.chatId))
+                                }
+                            }
+                            hostChatListViewModel.onChatListScreenEvent(event)
+                        },
+                    )
+                }
+                composable<RaznarokAppScreen.HostChat> {
+                    val hostChat: RaznarokAppScreen.HostChat = it.toRoute()
+                    val hostChatViewModel = koinViewModel<HostChatViewModel>(
+                        parameters = { parametersOf(hostChat.id, loginState.loggedInUser!!.id) }
+                    )
+                    val hostChatState by hostChatViewModel.chatState.collectAsStateWithLifecycle()
+                    HostChatScreen(
+                        hostChatState = hostChatState,
+                        onHostChatScreenEvent = { event ->
+                            when (event) {
+                                is HostChatScreenEvent.GoBack -> {
+                                    navController.popBackStack()
+                                }
+                                else -> Unit
+                            }
+                            hostChatViewModel.onHostChatScreenEvent(event)
+                        }
+                    )
+                }
+                composable<RaznarokAppScreen.HostProfileEdit> {
+                    val hostProfileEditViewModel = koinViewModel<HostProfileEditViewModel>(
+                        parameters = {
+                            parametersOf(loginState.loggedInUser!!.id)
+                        }
+                    )
+                    val hostProfileEditState by hostProfileEditViewModel.hostProfileEditState.collectAsStateWithLifecycle()
+                    HostProfileEditScreen(
+                        hostProfileEditState = hostProfileEditState,
+                        onHostProfileEditScreenEvent = hostProfileEditViewModel::onHostProfileEditScreenEvent,
+                    )
+                }
+            }
         }
     }
 }
@@ -185,6 +244,10 @@ fun String.getScreenFromRoute(): RaznarokAppScreen {
         "HostProfile" -> RaznarokAppScreen.HostProfile(1)
         "Chats" -> RaznarokAppScreen.Chats
         "Chat" -> RaznarokAppScreen.Chat(1)
+        "Host" -> RaznarokAppScreen.Host
+        "HostChats" -> RaznarokAppScreen.HostChats
+        "HostChat" -> RaznarokAppScreen.HostChat(1)
+        "HostProfileEdit" -> RaznarokAppScreen.HostProfileEdit
         else -> RaznarokAppScreen.GuestHome
     }
 }

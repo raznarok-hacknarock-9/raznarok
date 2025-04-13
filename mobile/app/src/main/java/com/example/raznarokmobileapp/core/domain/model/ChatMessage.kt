@@ -12,5 +12,4 @@ data class ChatMessage(
     val chatId: Int,
     val type: String,
     val status: String,
-
 )

@@ -5,6 +5,7 @@ import com.example.raznarokmobileapp.chat.di.chatModule
 import com.example.raznarokmobileapp.core.di.appModule
 import com.example.raznarokmobileapp.core.di.networkModule
 import com.example.raznarokmobileapp.guest.di.guestModule
+import com.example.raznarokmobileapp.host.di.hostModule
 import com.example.raznarokmobileapp.login.di.loginModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -17,7 +18,7 @@ class RaznarokMobileApp: Application() {
         startKoin {
             androidLogger()
             androidContext(this@RaznarokMobileApp)
-            modules(appModule, networkModule, loginModule, guestModule, chatModule)
+            modules(appModule, networkModule, loginModule, guestModule, chatModule, hostModule)
         }
     }
 }

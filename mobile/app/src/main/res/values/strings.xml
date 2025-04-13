@@ -14,7 +14,7 @@
     <string name="host">Host</string>
     <string name="continue_as">Continue As</string>
     <string name="continue_as_host">Continue as Host</string>
-    <string name="continue_as_guest">Continue as Guest</string>
+    <string name="continue_as_guest">Continue as Traveller</string>
     <string name="continue_as_guide">Continue as Guide</string>
     <string name="location">Location</string>
     <string name="dates">Dates</string>
@@ -36,5 +36,20 @@
     <string name="leave_a_comment">Leave a comment:</string>
     <string name="choose_your_mode">Choose your mode</string>
     <string name="find_local_hosts">Find Local Hosts</string>
+    <string name="edit">Edit</string>
+    <string name="confirm">Confirm</string>
+    <string name="propose_price">Suggest a price</string>
+    <string name="price_detail">Suggest a price that visitor will pay for your hosting service:</string>
+    <string name="suggested_cost">Suggested cost:</string>
+    <string name="guest_confirmed">Visitor confirmed the cost</string>
+    <string name="pending_confirmation">Waiting for confirmation</string>
+    <string name="user_canceled">User cancelled suggested cost</string>
+    <string name="deny">Deny</string>
+    <string name="meeting_confirmed">Meeting Confirmed</string>
+    <string name="pending_meeting_confirmation">Waiting for meeting confirmation</string>
+    <string name="visitor_cancelled">Meeting confirmation rejected</string>
+    <string name="meeting_confirmed_by_visitor">Meeting confirmed</string>
+    <string name="meeting_confirmation">Meeting confirmation</string>
+    <string name="meeting_confirmation_cancelled">Meeting confirmation was cancelled</string>
 
 </resources>

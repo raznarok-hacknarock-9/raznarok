@@ -41,6 +41,6 @@ sealed class RaznarokAppScreen(
     data class HostChat(val id: Int): RaznarokAppScreen("HostChat")
 
     @Serializable
-    data object HostProfileEdit: RaznarokAppScreen("HostProfileEdit")
+    data object HostProfileEdit: RaznarokAppScreen("HostProfileEdit", "Profile", R.drawable.ic_user)
 
 }

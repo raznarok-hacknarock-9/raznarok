@@ -26,6 +26,7 @@ fun ProfileSection(
     @DrawableRes icon: Int,
     @StringRes label: Int,
     modifier: Modifier = Modifier,
+    trailingContent: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     Column(
@@ -43,6 +44,10 @@ fun ProfileSection(
                 text = stringResource(label),
                 fontWeight = FontWeight.Bold,
             )
+            if (trailingContent != null) {
+                Spacer(modifier = Modifier.weight(1f))
+                trailingContent()
+            }
         }
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
         content()

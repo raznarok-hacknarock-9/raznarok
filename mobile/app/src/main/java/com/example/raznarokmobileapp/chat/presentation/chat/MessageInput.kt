@@ -2,6 +2,7 @@ package com.example.raznarokmobileapp.chat.presentation.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,12 +36,13 @@ import com.google.firebase.vertexai.type.content
 
 @Composable
 fun MessageInput(
+    sendEnabled: Boolean,
     isCommentButtonEnabled: Boolean,
     message: String,
-    onCommentDialogToggle: () -> Unit,
     onMessageChanged: (String) -> Unit,
     onMessageSent: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
@@ -49,16 +51,7 @@ fun MessageInput(
             .fillMaxWidth()
             .padding(vertical = dimensionResource(R.dimen.padding_small))
     ) {
-        IconButton(
-            onClick = onCommentDialogToggle,
-            enabled = isCommentButtonEnabled,
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_comments),
-                contentDescription = null,
-                modifier = Modifier.size(32.dp)
-            )
-        }
+        actions()
         TextField(
             value = message,
             onValueChange = onMessageChanged,
@@ -72,7 +65,8 @@ fun MessageInput(
             ),
             trailingIcon = {
                 IconButton(
-                    onClick = onMessageSent
+                    onClick = onMessageSent,
+                    enabled = sendEnabled
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Send,
