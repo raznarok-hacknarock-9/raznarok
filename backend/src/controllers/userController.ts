@@ -177,3 +177,22 @@ export const loginUser = async (
     next(error);
   }
 };
+
+export const addPoints = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = z.coerce.number().parse(req.params.id);
+  const pointsToAdd = z.coerce.number().parse(req.body.points);
+  const user = await prisma.user.update({
+    where: { id },
+    data: {
+      points: {
+        increment: pointsToAdd,
+      },
+    },
+  });
+
+  res.json(user);
+};
