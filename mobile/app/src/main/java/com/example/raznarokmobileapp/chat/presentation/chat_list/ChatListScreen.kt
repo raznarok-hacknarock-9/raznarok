@@ -33,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.raznarokmobileapp.R
+import com.example.raznarokmobileapp.core.domain.model.User
+import com.example.raznarokmobileapp.core.presentation.components.CoinsCard
 import com.example.raznarokmobileapp.core.presentation.components.UserAvatar
 import com.example.raznarokmobileapp.guest.presentation.utils.timeAgoFromIso
 import com.example.raznarokmobileapp.ui.theme.RaznarokMobileAppTheme
@@ -41,16 +43,24 @@ import java.time.Instant
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
+    loggedInUser: User,
     chatListState: ChatListState,
     onChatListScreenEvent: (ChatListScreenEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.chats)
+                        text = stringResource(R.string.chats),
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                },
+                actions = {
+                    CoinsCard(
+                        coins = loggedInUser.points,
+                        modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_medium))
                     )
                 }
             )
@@ -115,16 +125,5 @@ fun ChatListScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    RaznarokMobileAppTheme {
-        ChatListScreen(
-            chatListState = ChatListState(),
-            onChatListScreenEvent = {}
-        )
     }
 }

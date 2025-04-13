@@ -8,5 +8,5 @@ data class Comment(
     val content: String,
     val rating: Int,
     val authorId: Int,
-    val user: SimpleUser
+    val user: SimpleUser,
 )

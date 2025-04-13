@@ -71,8 +71,10 @@ fun ChatScreen(
             onDismissRequest = { isCommentDialogVisible = false },
             confirmButton = {
                 TextButton(
+                    enabled = chatState.comment.isNotBlank() && chatState.selectedRating > 0,
                     onClick = {
-
+                        onChatScreenEvent(ChatScreenEvent.AddComment)
+                        isCommentDialogVisible = false
                     }
                 ) {
                     Text(text = stringResource(R.string.comment))

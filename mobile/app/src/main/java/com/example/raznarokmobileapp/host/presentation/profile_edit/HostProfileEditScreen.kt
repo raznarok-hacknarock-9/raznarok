@@ -47,6 +47,7 @@ import coil3.compose.AsyncImage
 import com.example.raznarokmobileapp.R
 import com.example.raznarokmobileapp.core.domain.model.toFormattedString
 import com.example.raznarokmobileapp.core.presentation.components.UserAvatar
+import com.example.raznarokmobileapp.core.presentation.components.UserReviewsInfo
 import com.example.raznarokmobileapp.guest.presentation.host_profile.HostProfileScreenEvent
 import com.example.raznarokmobileapp.guest.presentation.host_profile.ProfileSection
 import com.example.raznarokmobileapp.guest.presentation.host_profile.ProfileTags
@@ -101,8 +102,8 @@ fun HostProfileEditScreen(
                     style = MaterialTheme.typography.displaySmall,
                     modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium))
                 )
-                Text(
-                    text = "${hostProfileEditState.user.commentsAsHost.size} reviews",
+                UserReviewsInfo(
+                    commentsAsHost = hostProfileEditState.user.commentsAsHost
                 )
                 ProfileTags(
                     tags = hostProfileEditState.user.tags,

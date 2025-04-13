@@ -34,6 +34,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.raznarokmobileapp.R
 import com.example.raznarokmobileapp.chat.presentation.chat_list.ChatListScreenEvent
+import com.example.raznarokmobileapp.core.domain.model.User
+import com.example.raznarokmobileapp.core.presentation.components.CoinsCard
 import com.example.raznarokmobileapp.core.presentation.components.UserAvatar
 import com.example.raznarokmobileapp.guest.presentation.utils.timeAgoFromIso
 import com.example.raznarokmobileapp.ui.theme.RaznarokMobileAppTheme
@@ -41,6 +43,7 @@ import com.example.raznarokmobileapp.ui.theme.RaznarokMobileAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HostChatListScreen(
+    loggedInUser: User,
     hostChatListState: HostChatListState,
     onHostChatListScreenEvent: (HostChatListScreenEvent) -> Unit,
     modifier: Modifier = Modifier
@@ -52,7 +55,14 @@ fun HostChatListScreen(
                     Text(
                         text = stringResource(R.string.chats)
                     )
-                }
+                },
+                actions = {
+                    CoinsCard(
+                        coins = loggedInUser.points,
+                        modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_medium))
+                    )
+                },
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
             )
         },
         modifier = modifier.fillMaxSize()
@@ -115,16 +125,5 @@ fun HostChatListScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    RaznarokMobileAppTheme {
-        HostChatListScreen(
-            hostChatListState = HostChatListState(),
-            onHostChatListScreenEvent = {}
-        )
     }
 }

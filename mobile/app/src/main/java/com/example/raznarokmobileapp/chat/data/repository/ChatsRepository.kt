@@ -45,6 +45,8 @@ class ChatsRepository(
         return api.sendMeetingMessage(chatId, hostId)
     }
 
+    suspend fun addComment(chatId: Int, userId: Int, content: String, rating: Int) {
+        api.addComment(chatId, userId, content, rating)
+    }
 
-//    suspend fun addComment()
 }

@@ -120,6 +120,18 @@ class KtorApi(
         }
     }
 
+    suspend fun addComment(chatId: Int, userId: Int, content: String, rating: Int) {
+        val json = buildJsonObject {
+            put("userId", userId)
+            put("content", content)
+            put("rating", rating)
+        }
+        client.post("${API_BASE_URL}/chats/${chatId}/comment") {
+            contentType(ContentType.Application.Json)
+            setBody(json)
+        }
+    }
+
     suspend fun fetchHosts(
         location: String,
         dateFrom: Long,

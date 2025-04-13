@@ -3,12 +3,14 @@ package com.example.raznarokmobileapp.guest.presentation.home
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
@@ -19,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +37,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.raznarokapp.core.presentation.components.CustomTextField
 import com.example.raznarokmobileapp.R
+import com.example.raznarokmobileapp.core.domain.model.User
+import com.example.raznarokmobileapp.core.presentation.components.CoinsCard
+import com.example.raznarokmobileapp.core.presentation.components.CurrencyIcon
 import com.example.raznarokmobileapp.core.presentation.components.UserList
 import com.example.raznarokmobileapp.guest.presentation.utils.convertDatesToString
 import com.example.raznarokmobileapp.ui.theme.RaznarokMobileAppTheme
@@ -45,6 +51,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GuestHomeScreen(
+    loggedUser: User,
     guestHomeState: GuestHomeState,
     onGuestHomeScreenEvent: (GuestHomeScreenEvent) -> Unit,
     modifier: Modifier = Modifier
@@ -53,6 +60,23 @@ fun GuestHomeScreen(
     val datePickerState = rememberDateRangePickerState()
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.find_local_hosts),
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                },
+                actions = {
+                    CoinsCard(
+                        coins = loggedUser.points,
+                        modifier = Modifier.padding(end = dimensionResource(R.dimen.padding_medium))
+                    )
+                },
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            )
+        },
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
         Column(
@@ -62,11 +86,6 @@ fun GuestHomeScreen(
                 .padding(horizontal = dimensionResource(R.dimen.padding_big))
                 .fillMaxWidth()
         ) {
-            Text(
-                text = stringResource(R.string.find_local_hosts),
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_big))
-            )
             CustomTextField(
                 value = guestHomeState.searchQuery,
                 icon = R.drawable.ic_location,
@@ -169,16 +188,5 @@ fun GuestHomeScreen(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    RaznarokMobileAppTheme {
-        GuestHomeScreen(
-            guestHomeState = GuestHomeState(),
-            onGuestHomeScreenEvent = {}
-        )
     }
 }

@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -57,6 +58,7 @@ import coil3.compose.AsyncImage
 import com.example.raznarokmobileapp.R
 import com.example.raznarokmobileapp.core.domain.model.toFormattedString
 import com.example.raznarokmobileapp.core.presentation.components.UserAvatar
+import com.example.raznarokmobileapp.core.presentation.components.UserReviewsInfo
 import com.example.raznarokmobileapp.guest.presentation.utils.API_BASE_URL
 import com.example.raznarokmobileapp.ui.theme.RaznarokMobileAppTheme
 import com.google.firebase.vertexai.type.content
@@ -137,8 +139,8 @@ fun HostProfileScreen(
                     style = MaterialTheme.typography.displaySmall,
                     modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium))
                 )
-                Text(
-                    text = "${hostProfileState.user.commentsAsHost.size} reviews",
+                UserReviewsInfo(
+                    commentsAsHost = hostProfileState.user.commentsAsHost
                 )
                 ProfileTags(
                     tags = hostProfileState.user.tags,
@@ -190,6 +192,21 @@ fun HostProfileScreen(
                                 Text(
                                     text = comment.content,
                                 )
+                            },
+                            trailingContent = {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_tiny)),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Star,
+                                        contentDescription = null
+                                    )
+                                    Text(
+                                        text = comment.rating.toString(),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                    )
+                                }
                             }
                         )
                         HorizontalDivider()

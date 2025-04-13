@@ -103,6 +103,7 @@ fun RaznarokAppNavigation(
                     val guestHomeViewModel = koinViewModel<GuestHomeViewModel>()
                     val guestHomeState by guestHomeViewModel.guestHomeState.collectAsStateWithLifecycle()
                     GuestHomeScreen(
+                        loggedUser = loginState.loggedInUser!!,
                         guestHomeState = guestHomeState,
                         onGuestHomeScreenEvent = { event ->
                             when (event) {
@@ -147,6 +148,7 @@ fun RaznarokAppNavigation(
                     )
                     val chatListState by chatListViewModel.chatListState.collectAsStateWithLifecycle()
                     ChatListScreen(
+                        loggedInUser = loginState.loggedInUser!!,
                         chatListState = chatListState,
                         onChatListScreenEvent = { event ->
                             when (event) {
@@ -163,7 +165,6 @@ fun RaznarokAppNavigation(
                     val chatViewModel = koinViewModel<ChatViewModel>(
                         parameters = { parametersOf(chat.id, loginState.loggedInUser!!.id) }
                     )
-                    // jak sie zapsuje to tutaj
                     val chatState by chatViewModel.chatState.collectAsStateWithLifecycle()
                     ChatScreen(
                         chatState = chatState,
@@ -187,6 +188,7 @@ fun RaznarokAppNavigation(
                     )
                     val hostChatListState by hostChatListViewModel.hostChatListState.collectAsStateWithLifecycle()
                     HostChatListScreen(
+                        loggedInUser = loginState.loggedInUser!!,
                         hostChatListState = hostChatListState,
                         onHostChatListScreenEvent = { event ->
                             when (event) {

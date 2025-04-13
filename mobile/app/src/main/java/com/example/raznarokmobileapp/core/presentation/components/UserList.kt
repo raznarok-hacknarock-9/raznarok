@@ -64,9 +64,8 @@ fun UserList(
                             text = user.firstName,
                             style = MaterialTheme.typography.titleLarge
                         )
-                        Text(
-                            text = "${user.commentsAsHost.size} reviews",
-                            style = MaterialTheme.typography.labelLarge
+                        UserReviewsInfo(
+                            commentsAsHost = user.commentsAsHost,
                         )
                     }
                 }

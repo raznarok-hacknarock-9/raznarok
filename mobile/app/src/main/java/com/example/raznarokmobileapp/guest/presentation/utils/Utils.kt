@@ -6,7 +6,8 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-const val API_BASE_URL = "http://172.98.1.172:3000"
+//const val API_BASE_URL = "http://172.98.1.172:3000"
+const val API_BASE_URL = "http://172.98.1.168:3000"
 
 fun timeAgoFromIso(isoString: String): String {
     val timestamp = Instant.parse(isoString)

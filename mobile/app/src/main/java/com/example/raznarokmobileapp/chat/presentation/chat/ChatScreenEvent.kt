@@ -19,4 +19,6 @@ sealed interface ChatScreenEvent {
     data class DenyMeetingConfirmation(val chatMessageId: Int): ChatScreenEvent
 
     data class ConfirmMeeting(val chatMessageId: Int): ChatScreenEvent
+
+    data object AddComment: ChatScreenEvent
 }

@@ -91,6 +91,7 @@ class ChatViewModel(
             is ChatScreenEvent.ConfirmCostSuggestion -> confirmCostSuggestion(event.chatMessageId)
             is ChatScreenEvent.DenyMeetingConfirmation -> denyMeetingConfirmation(event.chatMessageId)
             is ChatScreenEvent.ConfirmMeeting -> confirmMeeting(event.chatMessageId)
+            is ChatScreenEvent.AddComment -> addComment()
             else -> Unit
         }
     }
@@ -119,6 +120,13 @@ class ChatViewModel(
     private fun confirmMeeting(chatMessageId: Int) {
         viewModelScope.launch {
             chatsRepository.confirmMessage(chatMessageId)
+            getChat()
+        }
+    }
+
+    private fun addComment() {
+        viewModelScope.launch {
+            chatsRepository.addComment(chatId, userId, chatState.value.comment, chatState.value.selectedRating)
             getChat()
         }
     }
