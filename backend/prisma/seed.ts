@@ -44,13 +44,13 @@ main()
       data: {
         points: 1000,
         email: 'visitor@gmail.com',
-        firstName: 'Lucía',
+        firstName: 'Dominick',
         descriptionAsHost: `Hola! I'm a Barcelona native who loves sharing the city's vibrant culture, art, and food. Whether you're into exploring Gaudí's masterpieces, chilling by the beach, or tasting authentic tapas in tucked-away bars, I'd be thrilled to show you around. Let's make your Barcelona trip unforgettable—like a true local!
     `,
         tags: {
           connect: [{ id: adventureTag.id }],
         },
-        profilePictureFilename: 'visitor_profile.png',
+        profilePictureFilename: 'visitor_profile.jpg',
         availabilities: {
           create: [
             {
