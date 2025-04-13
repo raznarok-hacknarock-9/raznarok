@@ -3,10 +3,8 @@ package com.example.raznarokmobileapp.core.domain.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Comment(
+data class SimpleUser(
     val id: Int,
-    val content: String,
-    val rating: Int,
-    val authorId: Int,
-    val user: SimpleUser
+    val firstName: String,
+    val profilePictureFilename: String,
 )

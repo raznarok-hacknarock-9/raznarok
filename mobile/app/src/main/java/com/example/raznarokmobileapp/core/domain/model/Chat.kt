@@ -5,11 +5,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Chat(
     val id: Int,
-    val hostId: Int,
-    val visitorId: Int,
+    val host: SimpleUser,
+    val visitor: SimpleUser,
     val messages: List<ChatMessage> = emptyList(),
-    val hasHostConfirmed: Boolean = false,
-    val hasVisitorConfirmed: Boolean = false,
+    val cost: Int,
+    val isCostConfirmed: Boolean = false,
+    val isVisitConfirmed: Boolean = false,
     val hasHostCommented: Boolean = false,
     val hasVisitorCommented: Boolean = false
 )

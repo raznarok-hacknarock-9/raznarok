@@ -7,4 +7,5 @@ data class HostProfileState(
     val message: UiText? = null,
     val isLoadingUser: Boolean = false,
     val user: User? = null,
+    val createdChatId: Int? = null
 )

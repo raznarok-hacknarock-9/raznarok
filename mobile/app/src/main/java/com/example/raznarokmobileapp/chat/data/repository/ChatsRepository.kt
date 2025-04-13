@@ -1,0 +1,29 @@
+package com.example.raznarokmobileapp.chat.data.repository
+
+import com.example.raznarokmobileapp.core.data.api.KtorApi
+import com.example.raznarokmobileapp.core.domain.model.Chat
+import com.example.raznarokmobileapp.core.domain.model.ChatId
+import com.example.raznarokmobileapp.core.domain.model.ChatMessage
+
+class ChatsRepository(
+    private val api: KtorApi
+) {
+
+    suspend fun getChats(userId: Int): List<Chat> {
+        return api.getChats(userId)
+    }
+
+    suspend fun getChat(chatId: Int): Chat {
+        return api.getChat(chatId)
+    }
+
+    suspend fun sendMessage(chatId: Int, userId: Int, message: String): ChatMessage {
+        return api.sendMessage(chatId, userId, message)
+    }
+
+    suspend fun startChatWithHost(userId: Int, hostId: Int): ChatId {
+        return api.startChatWithHost(userId, hostId)
+    }
+
+//    suspend fun addComment()
+}

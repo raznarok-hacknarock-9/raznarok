@@ -3,6 +3,7 @@ package com.example.raznarokmobileapp.guest.presentation.host_profile
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.raznarokmobileapp.chat.data.repository.ChatsRepository
 import com.example.raznarokmobileapp.core.data.repository.UsersRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +15,9 @@ import kotlinx.coroutines.launch
 
 class HostProfileViewModel(
     private val userId: Int,
-    private val usersRepository: UsersRepository
+    private val hostId: Int,
+    private val usersRepository: UsersRepository,
+    private val chatsRepository: ChatsRepository
 ) : ViewModel() {
 
     private val _hostProfileState = MutableStateFlow(HostProfileState())
@@ -29,7 +32,7 @@ class HostProfileViewModel(
             it.copy(isLoadingUser = true)
         }
         viewModelScope.launch {
-            val user = usersRepository.getUserById(userId)
+            val user = usersRepository.getUserById(hostId)
             _hostProfileState.update {
                 it.copy(
                     user = user,
@@ -41,7 +44,26 @@ class HostProfileViewModel(
 
     fun onHostProfileScreenEvent(event: HostProfileScreenEvent) {
         when (event) {
-            else -> TODO("Handle actions")
+            is HostProfileScreenEvent.StartChatWithHost -> {
+                startChatWithHost(userId, event.hostId)
+            }
+            is HostProfileScreenEvent.ResetCreatedChatId -> {
+                _hostProfileState.update {
+                    it.copy(createdChatId = null)
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    private fun startChatWithHost(userId: Int, hostId: Int) {
+        viewModelScope.launch {
+            val chatId = chatsRepository.startChatWithHost(userId, hostId)
+            _hostProfileState.update {
+                it.copy(
+                    createdChatId = chatId.id
+                )
+            }
         }
     }
 

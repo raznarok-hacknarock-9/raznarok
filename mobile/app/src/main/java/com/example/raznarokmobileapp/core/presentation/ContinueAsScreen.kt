@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
@@ -41,48 +43,95 @@ fun ContinueAsScreen(
 ) {
     Column(
         modifier = Modifier
+            .padding(horizontal = dimensionResource(R.dimen.padding_big))
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
         ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_guest),
-                contentDescription = null,
-                modifier = Modifier.size(256.dp)
+            Text(
+                text = stringResource(R.string.choose_your_mode),
+                style = MaterialTheme.typography.headlineLarge
             )
-            FilledTonalButton(
-                onClick = {}
+            Button(
+                onClick = onContinueAsGuest,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = stringResource(R.string.continue_as_guest),
-                    style = MaterialTheme.typography.titleLarge,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small))
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_guest),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_small)))
+                    Text(
+                        text = stringResource(R.string.continue_as_guest)
+                    )
+                }
+            }
+            FilledTonalButton(
+                onClick = onContinueAsHost,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small))
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_guide),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_small)))
+                    Text(
+                        text = stringResource(R.string.continue_as_host)
+                    )
+                }
             }
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top,
-            modifier = Modifier
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_guide),
-                contentDescription = null,
-                modifier = Modifier.size(256.dp)
-            )
-            FilledTonalButton(
-                onClick = {}
-            ) {
-                Text(
-                    text = stringResource(R.string.continue_as_guide),
-                    style = MaterialTheme.typography.titleLarge,
-                )
-            }
-        }
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Center,
+//            modifier = Modifier
+//        ) {
+//            Icon(
+//                painter = painterResource(R.drawable.ic_guest),
+//                contentDescription = null,
+//                modifier = Modifier.size(256.dp)
+//            )
+//            FilledTonalButton(
+//                onClick = {}
+//            ) {
+//                Text(
+//                    text = stringResource(R.string.continue_as_guest),
+//                    style = MaterialTheme.typography.titleLarge,
+//                )
+//            }
+//        }
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Top,
+//            modifier = Modifier
+//        ) {
+//            Icon(
+//                painter = painterResource(R.drawable.ic_guide),
+//                contentDescription = null,
+//                modifier = Modifier.size(256.dp)
+//            )
+//            FilledTonalButton(
+//                onClick = {}
+//            ) {
+//                Text(
+//                    text = stringResource(R.string.continue_as_guide),
+//                    style = MaterialTheme.typography.titleLarge,
+//                )
+//            }
+//        }
     }
 }
 

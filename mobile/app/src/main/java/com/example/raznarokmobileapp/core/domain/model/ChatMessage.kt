@@ -10,4 +10,7 @@ data class ChatMessage(
     val isHostMessage: Boolean,
     val timestamp: String,
     val chatId: Int,
+    val type: String,
+    val status: String,
+
 )

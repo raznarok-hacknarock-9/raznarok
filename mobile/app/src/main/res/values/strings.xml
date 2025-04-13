@@ -24,5 +24,17 @@
     <string name="about">About</string>
     <string name="availability">Availability</string>
     <string name="start_chat">Start Chat</string>
+    <string name="reviews">Reviews</string>
+    <string name="chats">Chats</string>
+    <string name="go_back">Go Back</string>
+    <string name="report_user">Report User</string>
+    <string name="type_your_message">Type your message</string>
+    <string name="send">Send</string>
+    <string name="comment">Comment</string>
+    <string name="cancel">Cancel</string>
+    <string name="rate_your_experience">Rate your experience</string>
+    <string name="leave_a_comment">Leave a comment:</string>
+    <string name="choose_your_mode">Choose your mode</string>
+    <string name="find_local_hosts">Find Local Hosts</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.raznarokmobileapp
 
 import android.app.Application
+import com.example.raznarokmobileapp.chat.di.chatModule
 import com.example.raznarokmobileapp.core.di.appModule
 import com.example.raznarokmobileapp.core.di.networkModule
 import com.example.raznarokmobileapp.guest.di.guestModule
@@ -16,7 +17,7 @@ class RaznarokMobileApp: Application() {
         startKoin {
             androidLogger()
             androidContext(this@RaznarokMobileApp)
-            modules(appModule, networkModule, loginModule, guestModule)
+            modules(appModule, networkModule, loginModule, guestModule, chatModule)
         }
     }
 }

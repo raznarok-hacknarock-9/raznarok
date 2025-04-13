@@ -9,5 +9,5 @@ import org.koin.dsl.module
 
 val guestModule = module {
     singleOf(::GuestHomeViewModel)
-    viewModel { (userId: Int) -> HostProfileViewModel(userId, usersRepository = get()) }
+    viewModel { (userId: Int, hostId: Int) -> HostProfileViewModel(userId, hostId, usersRepository = get(), chatsRepository = get()) }
 }

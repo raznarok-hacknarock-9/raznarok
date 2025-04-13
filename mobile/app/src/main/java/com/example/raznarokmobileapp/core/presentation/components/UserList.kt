@@ -1,6 +1,7 @@
 package com.example.raznarokmobileapp.core.presentation.components
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,7 @@ fun UserList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
         modifier = modifier
             .padding(top = dimensionResource(R.dimen.padding_medium))
     ) {
@@ -53,12 +55,8 @@ fun UserList(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
                 ) {
-                    AsyncImage(
-                        model = "${API_BASE_URL}/assets/${user.profilePictureFilename}",
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(64.dp)
-                            .clip(CircleShape)
+                    UserAvatar(
+                        profilePicture = user.profilePictureFilename
                     )
                     Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_medium)))
                     Column {

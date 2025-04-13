@@ -14,5 +14,8 @@ data class User(
     val tags: List<Tag> = emptyList(),
     val availabilities: List<Availability> = emptyList(),
     val chatsAsHost: List<Chat> = emptyList(),
-    val chatsAsVisitor: List<Chat> = emptyList()
+    val chatsAsVisitor: List<Chat> = emptyList(),
+    val points: Int,
+    val minPriceRange: Int,
+    val maxPriceRange: Int
 )
