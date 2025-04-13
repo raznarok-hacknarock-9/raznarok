@@ -10,4 +10,5 @@ data class ChatState(
     val typedMessage: String = "",
     val comment: String = "",
     val selectedRating: Int = 0,
+    val shouldUpdatePoints: Boolean = false,
 )

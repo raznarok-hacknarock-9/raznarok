@@ -6,10 +6,6 @@ sealed interface LoginScreenEvent {
 
     data class PasswordChanged(val password: String): LoginScreenEvent
 
-//    data class GotSignInResult(val signInResult: Unit): LoginScreenEvent
-
-//    data class SignInWithCredential(val credential: AuthCredential): LoginScreenEvent
-
     data object SignInWithEmailAndPassword: LoginScreenEvent
 
     data object ResetState: LoginScreenEvent

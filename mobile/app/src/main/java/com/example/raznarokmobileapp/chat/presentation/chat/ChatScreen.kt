@@ -2,6 +2,7 @@ package com.example.raznarokmobileapp.chat.presentation.chat
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -120,7 +122,10 @@ fun ChatScreen(
                 title = {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable {
+                            onChatScreenEvent(ChatScreenEvent.NavigateToProfile(chatState.chat.host.id))
+                        }
                     ) {
                         UserAvatar(
                             profilePicture = chatState.chat.host.profilePictureFilename,

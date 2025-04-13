@@ -27,7 +27,7 @@ fun UserReviewsInfo(
                 contentDescription = null
             )
             Text(
-                text = "${commentsAsHost.map { it.rating }.average()} (${commentsAsHost.size} reviews)",
+                text = "${"%.2f".format(commentsAsHost.map { it.rating }.average())} (${commentsAsHost.size} reviews)",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small))
             )

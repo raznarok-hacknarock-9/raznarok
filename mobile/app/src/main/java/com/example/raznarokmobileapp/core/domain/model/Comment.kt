@@ -9,4 +9,5 @@ data class Comment(
     val rating: Int,
     val authorId: Int,
     val user: SimpleUser,
+    val author: SimpleUser
 )

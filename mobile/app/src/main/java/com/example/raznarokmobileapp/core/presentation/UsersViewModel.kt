@@ -20,7 +20,6 @@ class UsersViewModel(
     val usersState = _usersState.asStateFlow()
 
     init {
-        Log.d("XXX", BuildConfig.SAMPLE_API_KEY)
 //        getUsers()
     }
 

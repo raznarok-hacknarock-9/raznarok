@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults.contentWindowInsets
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -172,6 +173,9 @@ fun RaznarokAppNavigation(
                             when (event) {
                                 is ChatScreenEvent.GoBack -> {
                                     navController.popBackStack()
+                                }
+                                is ChatScreenEvent.NavigateToProfile -> {
+                                    navController.navigate(RaznarokAppScreen.HostProfile(event.hostId))
                                 }
                                 else -> Unit
                             }

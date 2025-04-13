@@ -179,12 +179,12 @@ fun HostProfileScreen(
                         ListItem(
                             leadingContent = {
                                 UserAvatar(
-                                    profilePicture = comment.user.profilePictureFilename
+                                    profilePicture = comment.author.profilePictureFilename
                                 )
                             },
                             headlineContent = {
                                 Text(
-                                    text = comment.user.firstName,
+                                    text = comment.author.firstName,
                                     fontWeight = FontWeight.Bold,
                                 )
                             },

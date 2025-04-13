@@ -10,6 +10,8 @@ import com.example.raznarokmobileapp.core.domain.model.User
 import com.example.raznarokmobileapp.login.domain.SignInError
 import kotlinx.coroutines.launch
 import com.example.raznarokmobileapp.core.domain.Result
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 class LoginViewModel(
     private val usersRepository: UsersRepository,
@@ -35,6 +37,24 @@ class LoginViewModel(
         }
     }
 
+    private fun refreshUser() {
+        viewModelScope.launch {
+            val user = usersRepository.getUserById(loginState.loggedInUser!!.id)
+            loginState = loginState.copy(
+                loggedInUser = user
+            )
+        }
+    }
+
+    private fun startRefreshingUser() {
+        viewModelScope.launch {
+            while (isActive) {
+                refreshUser()
+                delay(1000L)
+            }
+        }
+    }
+
     private fun signInWithEmailAndPassword() {
         viewModelScope.launch {
             val loginResult = usersRepository.signInWithEmailAndPassword(loginState.email, loginState.password)
@@ -53,6 +73,7 @@ class LoginViewModel(
                     )
                 }
             }
+            startRefreshingUser()
         }
     }
 

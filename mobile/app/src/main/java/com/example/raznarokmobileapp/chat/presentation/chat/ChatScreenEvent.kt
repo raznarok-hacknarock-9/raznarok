@@ -21,4 +21,6 @@ sealed interface ChatScreenEvent {
     data class ConfirmMeeting(val chatMessageId: Int): ChatScreenEvent
 
     data object AddComment: ChatScreenEvent
+
+    data class NavigateToProfile(val hostId: Int): ChatScreenEvent
 }
