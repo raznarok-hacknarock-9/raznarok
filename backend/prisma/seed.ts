@@ -91,7 +91,7 @@ main()
       data: [
         {
           content:
-            'Lucía was a respectful and curious guest. Great conversation too.',
+            'Dominick was a respectful and curious guest. Great conversation too.',
           rating: 5,
           authorId: hostUser.id,
           userId: visitorUser.id,
