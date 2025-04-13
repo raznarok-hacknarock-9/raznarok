@@ -5,7 +5,9 @@ async function main() {}
 main()
   .then(async () => {
     const foodTag = await prisma.tag.create({ data: { name: 'Food' } });
-    const adventureTag = await prisma.tag.create({ data: { name: 'Adventure' } });
+    const adventureTag = await prisma.tag.create({
+      data: { name: 'Adventure' },
+    });
     const cultureTag = await prisma.tag.create({ data: { name: 'Culture' } });
     const natureTag = await prisma.tag.create({ data: { name: 'Nature' } });
     const historyTag = await prisma.tag.create({ data: { name: 'History' } });
@@ -14,7 +16,7 @@ main()
 
     const hostUser = await prisma.user.create({
       data: {
-        points: 4000,
+        points: 1000,
         email: 'host@gmail.com',
         firstName: 'Adam',
         descriptionAsHost: `Hi! I'm a local from Kraków who loves showing guests the city's hidden gems—especially when it comes to food. From cozy traditional spots to trendy local favorites, I can point you to (or take you to!) some truly amazing restaurants. Let me help you experience Kraków like a local!
@@ -23,6 +25,8 @@ main()
           connect: [{ id: foodTag.id }, { id: cultureTag.id }],
         },
         profilePictureFilename: 'host_profile.png',
+        minPriceRange: 100,
+        maxPriceRange: 2000,
         availabilities: {
           create: [
             {
@@ -42,11 +46,13 @@ main()
 
     const visitorUser = await prisma.user.create({
       data: {
-        points: 1000,
-        email: 'visitor@gmail.com',
+        points: 120,
+        email: 'traveler@gmail.com',
         firstName: 'Dominick',
         descriptionAsHost: `Hola! I'm a Barcelona native who loves sharing the city's vibrant culture, art, and food. Whether you're into exploring Gaudí's masterpieces, chilling by the beach, or tasting authentic tapas in tucked-away bars, I'd be thrilled to show you around. Let's make your Barcelona trip unforgettable—like a true local!
     `,
+        minPriceRange: 100,
+        maxPriceRange: 2000,
         tags: {
           connect: [{ id: adventureTag.id }],
         },
